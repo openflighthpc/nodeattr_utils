@@ -29,29 +29,24 @@
 module NodeattrUtils
   module NodeParser
     NAME = /\w+/
-    RANGE = /\d+([,-]\d+)*/ # Exclude invalid: [] [,] [1-] etc...
-    SECTION = /#{NAME}(\[#{RANGE}\])?/
+    RANGE = /\[(\d+([,-]\d+)*)\]/ # Exclude invalid: [] [,] [1-] etc...
+    SECTION = /#{NAME}(#{RANGE})?/
     EXTERNAL_COMMA = /,(?![^\[]*\])/
     GENERAL_REGEX = /\A#{SECTION}(,#{SECTION})*\Z/
-    RANGE_REGEX = /\A(#{NAME})\[(#{RANGE})\]\Z/
+    RANGE_REGEX = /\A(#{NAME})#{RANGE}\Z/
 
     def self.expand(nodes_string)
       return [] if nodes_string.nil? || nodes_string.empty?
       error_if_invalid_node_syntax(nodes_string)
-      split_nodes = nodes_string.split(EXTERNAL_COMMA)
-      split_nodes.each_with_object([]) do |node, nodes|
+      nodes_string.split(EXTERNAL_COMMA)
+                  .each_with_object([]) do |node, nodes|
         if match = node.match(RANGE_REGEX)
-          prefix, suffix = match[1,2]
-          ranges = suffix.split(',')
-          ranges.each do |range|
+          prefix, ranges = match[1,2]
+          ranges.split(',').each do |range|
             if range.match(/-/)
-              min, max = split_continuous_range(range)
-              range_nodes = (min.to_i .. max.to_i).map do |num|
-                sprintf("#{prefix}%0#{min.length}d", num.to_s)
-              end
-              nodes.push(*range_nodes)
+              nodes.push(*expand_range(prefix, range))
             else
-              nodes << "#{prefix}#{range}"
+              nodes.push("#{prefix}#{range}")
             end
           end
         else
@@ -69,12 +64,14 @@ module NodeattrUtils
       ERROR
     end
 
-    def self.split_continuous_range(range)
+    def self.expand_range(prefix, range)
       min, max = range.split('-')
-      return [min, max] if min <= max
-      raise NodeSyntaxError, <<~ERROR
+      raise NodeSyntaxError, <<~ERROR if min > max
         '#{range}' the minimum index can not be greater than the maximum
       ERROR
+      (min.to_i .. max.to_i).map do |num|
+        sprintf("#{prefix}%0#{min.length}d", num.to_s)
+      end
     end
   end
 end
