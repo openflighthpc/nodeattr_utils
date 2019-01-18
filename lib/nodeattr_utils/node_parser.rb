@@ -45,7 +45,7 @@ module NodeattrUtils
           ranges = suffix.split(',')
           ranges.each do |range|
             if range.match(/-/)
-              min, max = range.split('-')
+              min, max = split_continuous_range(range)
               (min.to_i .. max.to_i).each do |num|
                 nodes << "#{prefix}#{num.to_s.rjust(min.length, '0')}"
               end
@@ -66,6 +66,14 @@ module NodeattrUtils
       return if GENERAL_REGEX.match?(str)
       raise NodeSyntaxError, <<~ERROR
         #{str.inspect} does not represent a range of nodes
+      ERROR
+    end
+
+    def self.split_continuous_range(range)
+      min, max = range.split('-')
+      return [min, max] if min <= max
+      raise NodeSyntaxError, <<~ERROR
+        '#{range}' the minimum index can not be greater than the maximum
       ERROR
     end
   end
