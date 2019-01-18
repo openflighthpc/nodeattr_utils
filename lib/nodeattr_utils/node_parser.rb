@@ -39,14 +39,14 @@ module NodeattrUtils
       return [] if nodes_string.nil? || nodes_string.empty?
       error_if_invalid_node_syntax(nodes_string)
       nodes_string.split(EXTERNAL_COMMA)
-                  .each_with_object([]) do |node, nodes|
-        if match = node.match(RANGE_REGEX)
+                  .each_with_object([]) do |section, nodes|
+        if match = section.match(RANGE_REGEX)
           prefix, ranges = match[1,2]
           ranges.split(',').each do |range|
             nodes.push(*expand_range(prefix, range))
           end
         else
-          nodes.push(node)
+          nodes.push(section)
         end
       end
     end
