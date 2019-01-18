@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["dev@alces-software.com"]
 
   spec.summary       = %q{Ruby implementation of nodeattr behaviour}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/alces-software/nodeattr_utils"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
