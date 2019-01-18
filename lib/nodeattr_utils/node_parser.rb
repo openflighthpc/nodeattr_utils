@@ -43,11 +43,7 @@ module NodeattrUtils
         if match = node.match(RANGE_REGEX)
           prefix, ranges = match[1,2]
           ranges.split(',').each do |range|
-            if range.match(/-/)
-              nodes.push(*expand_range(prefix, range))
-            else
-              nodes.push("#{prefix}#{range}")
-            end
+            nodes.push(*expand_range(prefix, range))
           end
         else
           nodes.push(node)
@@ -65,12 +61,14 @@ module NodeattrUtils
     end
 
     def self.expand_range(prefix, range)
-      min, max = range.split('-')
+      return ["#{prefix}#{range}"] unless range.include?('-')
+      min_str, _ = indices = range.split('-')
+      min, max = indices.map(&:to_i)
       raise NodeSyntaxError, <<~ERROR if min > max
         '#{range}' the minimum index can not be greater than the maximum
       ERROR
-      (min.to_i .. max.to_i).map do |num|
-        sprintf("#{prefix}%0#{min.length}d", num.to_s)
+      (min .. max).map do |num|
+        sprintf("#{prefix}%0#{min_str.length}d", num)
       end
     end
   end
