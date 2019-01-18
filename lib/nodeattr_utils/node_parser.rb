@@ -28,10 +28,10 @@
 
 module NodeattrUtils
   module NodeParser
+    EXTERNAL_COMMA = /,(?![^\[]*\])/
     NAME = /\w+/
     RANGE = /\[(\d+([,-]\d+)*)\]/ # Exclude invalid: [] [,] [1-] etc...
     SECTION = /#{NAME}(#{RANGE})?/
-    EXTERNAL_COMMA = /,(?![^\[]*\])/
     GENERAL_REGEX = /\A#{SECTION}(,#{SECTION})*\Z/
     RANGE_REGEX = /\A(#{NAME})#{RANGE}\Z/
 
