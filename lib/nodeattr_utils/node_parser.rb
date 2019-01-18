@@ -31,14 +31,14 @@ module NodeattrUtils
     NAME = /\w+/
     RANGE = /\d+([,-]\d+)*/ # Exclude invalid: [] [,] [1-] etc...
     SECTION = /#{NAME}(\[#{RANGE}\])?/
+    EXTERNAL_COMMA = /,(?![^\[]*\])/
     GENERAL_REGEX = /\A#{SECTION}(,#{SECTION})*\Z/
     RANGE_REGEX = /\A(#{NAME})\[(#{RANGE})\]\Z/
 
     def self.expand(nodes_string)
       return [] if nodes_string.nil? || nodes_string.empty?
-      nodes_string = nodes_string.to_s
       error_if_invalid_node_syntax(nodes_string)
-      split_nodes = [nodes_string]
+      split_nodes = nodes_string.split(EXTERNAL_COMMA)
       nodes = []
       split_nodes.each do |node|
         if match = node.match(RANGE_REGEX)
