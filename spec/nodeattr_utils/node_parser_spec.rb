@@ -40,9 +40,27 @@ RSpec.describe NodeattrUtils::NodeParser do
       expect(described_class.expand(*args))
     end
 
+    context 'with a invalid node input' do
+      ['%%%', 'n[1-9', 'n4]', 'n[c]', 'n[1,c,2]', 'n[2-1]'].each do |node|
+        it "#{node.inspect} raises NodeSyntaxError" do
+          expect do
+            described_class.expand(node)
+          end.to raise_error(NodeattrUtils::NodeSyntaxError)
+        end
+      end
+    end
+
     shared_examples 'expands the nodes' do
       it 'expands the nodes' do
         expect_expand(nodes_string).to contain_exactly(*nodes)
+      end
+    end
+
+    context 'with a empty inputs' do
+      ['', nil].each do |node|
+        it "#{node.inspect} returns an empty array" do
+          expect_expand(node).to eq([])
+        end
       end
     end
 

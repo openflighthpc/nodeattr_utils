@@ -25,10 +25,12 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-require "nodeattr_utils/version"
-require 'nodeattr_utils/node_parser'
-require 'nodeattr_utils/exceptions'
 
 module NodeattrUtils
+  class NodeattrUtilsError < StandardError
+  end
+
+  class NodeSyntaxError < NodeattrUtilsError
+  end
 end
 
