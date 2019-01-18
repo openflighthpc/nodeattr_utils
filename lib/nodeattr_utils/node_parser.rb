@@ -46,9 +46,10 @@ module NodeattrUtils
           ranges.each do |range|
             if range.match(/-/)
               min, max = split_continuous_range(range)
-              (min.to_i .. max.to_i).each do |num|
-                nodes << "#{prefix}#{num.to_s.rjust(min.length, '0')}"
+              range_nodes = (min.to_i .. max.to_i).map do |num|
+                sprintf("#{prefix}%0#{min.length}d", num.to_s)
               end
+              nodes.push(*range_nodes)
             else
               nodes << "#{prefix}#{range}"
             end
