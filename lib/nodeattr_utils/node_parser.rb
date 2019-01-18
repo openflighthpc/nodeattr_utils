@@ -36,7 +36,7 @@ module NodeattrUtils
     def self.expand(nodes_string)
       error_if_invalid_node_syntax(nodes_string)
       split_nodes = [nodes_string]
-      nodes = []
+      nodes = [nodes_string]
       split_nodes.each do |node|
         if node.match(RANGE_REGEX)
           m = node.match(/^(.*)\[(.*)\]$/)
@@ -53,11 +53,10 @@ module NodeattrUtils
               nodes << "#{prefix}#{range}"
             end
           end
-          split_nodes.delete(node)
+          nodes.delete(node)
         end
       end
-      split_nodes = split_nodes + nodes
-      return split_nodes
+      return nodes
     end
 
     private_class_method
