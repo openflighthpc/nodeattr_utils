@@ -35,9 +35,9 @@ module NodeattrUtils
 
     def self.expand(nodes_string)
       error_if_invalid_node_syntax(nodes_string)
-      nodes = [nodes_string]
-      new_nodes = []
-      nodes.each do |node|
+      split_nodes = [nodes_string]
+      nodes = []
+      split_nodes.each do |node|
         if node.match(RANGE_REGEX)
           m = node.match(/^(.*)\[(.*)\]$/)
           prefix = m[1]
@@ -45,19 +45,19 @@ module NodeattrUtils
           ranges = suffix.split(',')
           ranges.each do |range|
             if range.match(/-/)
-              num_1, num_2 = range.split('-')
-              (num_1.to_i .. num_2.to_i).each do |num|
-                new_nodes << "#{prefix}#{num.to_s.rjust(num_1.length, '0')}"
+              min, max = range.split('-')
+              (min.to_i .. max.to_i).each do |num|
+                nodes << "#{prefix}#{num.to_s.rjust(min.length, '0')}"
               end
             else
-              new_nodes << "#{prefix}#{range}"
+              nodes << "#{prefix}#{range}"
             end
           end
-          nodes.delete(node)
+          split_nodes.delete(node)
         end
       end
-      nodes = nodes + new_nodes
-      return nodes
+      split_nodes = split_nodes + nodes
+      return split_nodes
     end
 
     private_class_method
