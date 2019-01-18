@@ -28,11 +28,17 @@
 
 module NodeattrUtils
   module NodeParser
+    NAME = '\w+'
+    RANGE = '\[[0-9]+.*[0-9]+\]'
+    GENERAL_REGEX = /#{NAME}(#{RANGE})?$/
+    RANGE_REGEX = /#{NAME}#{RANGE}/
+
     def self.expand(nodes_string)
+      error_if_invalid_node_syntax(nodes_string)
       nodes = [nodes_string]
       new_nodes = []
       nodes.each do |node|
-        if node.match(/.*\[[0-9]+.*[0-9]+\]$/)
+        if node.match(RANGE_REGEX)
           m = node.match(/^(.*)\[(.*)\]$/)
           prefix = m[1]
           suffix = m[2]
@@ -60,6 +66,15 @@ module NodeattrUtils
       end
       nodes = nodes + new_nodes
       return nodes
+    end
+
+    private_class_method
+
+    def self.error_if_invalid_node_syntax(str)
+      return if GENERAL_REGEX.match?(str)
+      raise NodeSyntaxError, <<~ERROR
+        #{str.inspect} does not match a range of nodes syntax
+      ERROR
     end
   end
 end
