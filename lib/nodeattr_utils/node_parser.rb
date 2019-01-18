@@ -25,9 +25,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-require "nodeattr_utils/version"
-require 'nodeattr_utils/node_parser'
 
 module NodeattrUtils
+  module NodeParser
+    def self.expand(node_string)
+      []
+    end
+  end
 end
-
