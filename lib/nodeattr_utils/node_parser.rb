@@ -29,9 +29,9 @@
 module NodeattrUtils
   module NodeParser
     NAME = '\w+'
-    RANGE = '\[\d+([,-]\d+)*\]' # Exclude invalid: [] [,] [1-] etc...
-    GENERAL_REGEX = /\A#{NAME}(#{RANGE})?\Z/
-    RANGE_REGEX = /\A#{NAME}#{RANGE}\Z/
+    RANGE = '\d+([,-]\d+)*' # Exclude invalid: [] [,] [1-] etc...
+    GENERAL_REGEX = /\A#{NAME}(\[#{RANGE}\])?\Z/
+    RANGE_REGEX = /\A#{NAME}\[#{RANGE}\]\Z/
 
     def self.expand(nodes_string)
       error_if_invalid_node_syntax(nodes_string)
