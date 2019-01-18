@@ -61,7 +61,7 @@ RSpec.describe NodeattrUtils::NodeParser do
 
     context 'with a empty inputs' do
       ['', nil].each do |node|
-        xit "#{node.inspect} returns an empty array" do
+        it "#{node.inspect} returns an empty array" do
           expect_expand(node).to eq([])
         end
       end
@@ -145,6 +145,13 @@ RSpec.describe NodeattrUtils::NodeParser do
         suffix = suffix_indices.join(',')
         "node[#{prefix},#{cont_str},#{suffix}]"
       end
+
+      include_examples 'expands the nodes'
+    end
+
+    context 'with multiple single nodes' do
+      let(:nodes) { ['node', 'slave', 'login'] }
+      let(:nodes_string) { nodes.join(',') }
 
       include_examples 'expands the nodes'
     end
