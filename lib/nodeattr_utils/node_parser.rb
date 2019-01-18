@@ -31,17 +31,15 @@ module NodeattrUtils
     NAME = '\w+'
     RANGE = '\d+([,-]\d+)*' # Exclude invalid: [] [,] [1-] etc...
     GENERAL_REGEX = /\A#{NAME}(\[#{RANGE}\])?\Z/
-    RANGE_REGEX = /\A#{NAME}\[#{RANGE}\]\Z/
+    RANGE_REGEX = /\A(#{NAME})\[(#{RANGE})\]\Z/
 
     def self.expand(nodes_string)
       error_if_invalid_node_syntax(nodes_string)
       split_nodes = [nodes_string]
       nodes = []
       split_nodes.each do |node|
-        if node.match(RANGE_REGEX)
-          m = node.match(/^(.*)\[(.*)\]$/)
-          prefix = m[1]
-          suffix = m[2]
+        if match = node.match(RANGE_REGEX)
+          prefix, suffix = match[1,2]
           ranges = suffix.split(',')
           ranges.each do |range|
             if range.match(/-/)
