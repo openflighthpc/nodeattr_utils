@@ -28,8 +28,38 @@
 
 module NodeattrUtils
   module NodeParser
-    def self.expand(node_string)
-      []
+    def self.expand(nodes_string)
+      nodes = [nodes_string]
+      new_nodes = []
+      nodes.each do |node|
+        if node.match(/.*\[[0-9]+.*[0-9]+\]$/)
+          m = node.match(/^(.*)\[(.*)\]$/)
+          prefix = m[1]
+          suffix = m[2]
+          ranges = suffix.split(',')
+          ranges.each do |range|
+            if range.match(/-/)
+              num_1, num_2 = range.split('-')
+              # chomp here is in case num_1 consists only of 0's
+              # in that case, e.g. node[000-001], the padding should be 1 char shorter
+              # than all the leading 0s in num_1, e.g. '00'
+              padding = num_1.chomp('0').match(/^0+/)
+              unless num_1 <= num_2
+                $stderr.puts "Invalid node range #{range}"
+                exit
+              end
+              (num_1.to_i .. num_2.to_i).each do |num|
+                new_nodes.push(sprintf("%s%0#{padding.to_s.length + 1}d", prefix, num))
+              end
+            else
+              new_nodes << "#{prefix}#{range}"
+            end
+          end
+          nodes.delete(node)
+        end
+      end
+      nodes = nodes + new_nodes
+      return nodes
     end
   end
 end
