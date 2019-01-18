@@ -41,7 +41,10 @@ RSpec.describe NodeattrUtils::NodeParser do
     end
 
     context 'with a invalid node input' do
-      ['%%%', 'n[1-9', 'n4]', 'n[c]', 'n[1,c,2]', 'n[2-1]', 'n[-2]', 'n[]'].each do |node|
+      [
+        '%%%', 'n[1-9', 'n4]', 'n[c]', 'n[1,c,2]', 'n[2-1]', 'n[-2]', 'n[]',
+        'n[1,,2]', 'n[1,-2]', 'n[,]', 'n[-]'
+      ].each do |node|
         it "#{node.inspect} raises NodeSyntaxError" do
           expect do
             described_class.expand(node)

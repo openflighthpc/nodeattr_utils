@@ -29,7 +29,7 @@
 module NodeattrUtils
   module NodeParser
     NAME = '\w+'
-    RANGE = '\[[\d\,-]+\]'
+    RANGE = '\[\d+([,-]\d+)*\]' # Exclude invalid: [] [,] [1-] etc...
     GENERAL_REGEX = /\A#{NAME}(#{RANGE})?\Z/
     RANGE_REGEX = /\A#{NAME}#{RANGE}\Z/
 
