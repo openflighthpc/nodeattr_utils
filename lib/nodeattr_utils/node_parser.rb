@@ -29,7 +29,7 @@
 module NodeattrUtils
   module NodeParser
     NAME = '\w+'
-    RANGE = '\[[0-9]+.*[0-9]+\]'
+    RANGE = '\[[\d\,-]+\]'
     GENERAL_REGEX = /\A#{NAME}(#{RANGE})?\Z/
     RANGE_REGEX = /\A#{NAME}#{RANGE}\Z/
 
@@ -65,7 +65,7 @@ module NodeattrUtils
     def self.error_if_invalid_node_syntax(str)
       return if GENERAL_REGEX.match?(str)
       raise NodeSyntaxError, <<~ERROR
-        #{str.inspect} does not match a range of nodes syntax
+        #{str.inspect} does not represent a range of nodes
       ERROR
     end
   end
