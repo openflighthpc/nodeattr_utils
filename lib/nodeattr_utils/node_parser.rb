@@ -39,8 +39,7 @@ module NodeattrUtils
       return [] if nodes_string.nil? || nodes_string.empty?
       error_if_invalid_node_syntax(nodes_string)
       split_nodes = nodes_string.split(EXTERNAL_COMMA)
-      nodes = []
-      split_nodes.each do |node|
+      split_nodes.each_with_object([]) do |node, nodes|
         if match = node.match(RANGE_REGEX)
           prefix, suffix = match[1,2]
           ranges = suffix.split(',')
@@ -59,7 +58,6 @@ module NodeattrUtils
           nodes.push(node)
         end
       end
-      return nodes
     end
 
     private_class_method
