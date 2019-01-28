@@ -39,10 +39,20 @@ RSpec.describe NodeattrUtils::NodeParser do
     expect(described_class.expand(*args))
   end
 
+  def expect_collapse(*args)
+    expect(described_class.collapse(*args))
+  end
+
   shared_examples 'parses the nodes' do
     describe '::expand' do
       it 'expands the nodes' do
         expect_expand(nodes_string).to contain_exactly(*nodes)
+      end
+    end
+
+    describe '#collapse' do
+      it 'collapses the nodes' do
+        expect_collapse(*nodes).to eq(nodes_string)
       end
     end
   end

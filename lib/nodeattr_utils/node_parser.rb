@@ -51,6 +51,10 @@ module NodeattrUtils
       end
     end
 
+    def self.collapse(*nodes)
+      nodes.join(',')
+    end
+
     private_class_method
 
     def self.error_if_invalid_node_syntax(str)
