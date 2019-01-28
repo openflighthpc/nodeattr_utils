@@ -64,6 +64,7 @@ module NodeattrUtils
       numbers = nodes.map { |n| n.sub(leader, '') }
                      .sort_by(&:to_i)
       return leader if numbers == ['']
+      return "#{leader}#{numbers.first}" if numbers.length == 1
       width = numbers.first.length
       numbers = numbers.map(&:to_i)
       first = numbers.shift
