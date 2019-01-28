@@ -59,10 +59,12 @@ RSpec.describe NodeattrUtils::NodeParser do
 
   context 'with a single node input' do
     ['node', 'node1', 'node01'].each do |node|
-      let(:nodes_string) { node }
-      let(:nodes) { [node] }
+      context "with a single node: #{node}" do
+        let(:nodes_string) { node }
+        let(:nodes) { [node] }
 
-      include_examples 'parses the nodes'
+        include_examples 'parses the nodes'
+      end
     end
   end
 

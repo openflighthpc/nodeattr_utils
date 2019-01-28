@@ -29,6 +29,7 @@
 module NodeattrUtils
   module NodeParser
     EXTERNAL_COMMA = /,(?![^\[]*\])/
+    ALPHA_NAME = /[a-zA-Z_]+/
     NAME = /\w+/
     RANGE = /\[(\d+([,-]\d+)*)\]/ # Exclude invalid: [] [,] [1-] etc...
     SECTION = /#{NAME}(#{RANGE})?/
@@ -52,10 +53,36 @@ module NodeattrUtils
     end
 
     def self.collapse(*nodes)
-      nodes.join(',')
+      nodes.group_by { |n| n.match(ALPHA_NAME)[0] }
+           .map { |leader, nodes| collapse_range(leader, nodes) }
+           .join(',')
     end
 
     private_class_method
+
+    def self.collapse_range(leader, nodes)
+      numbers = nodes.map { |n| n.sub(leader, '') }
+                     .sort_by(&:to_i)
+      return leader if numbers == ['']
+      width = numbers.first.length
+      numbers = numbers.map(&:to_i)
+      first = numbers.shift
+      ranges = numbers.each_with_object([[first, first]]) do |value, memo|
+        if memo.last.last == value - 1
+          memo.last[-1] = value
+        else
+          memo.push([value, value])
+        end
+      end
+      ranges.map! do |min, max|
+        min == max ? pad(min, width) : "#{pad(min, width)}-#{pad(max, width)}"
+      end
+      "#{leader}[#{ranges.join(',')}]"
+    end
+
+    def self.pad(int, width)
+      sprintf("%0#{width}d", int)
+    end
 
     def self.error_if_invalid_node_syntax(str)
       return if GENERAL_REGEX.match?(str)
