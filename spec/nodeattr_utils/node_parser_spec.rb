@@ -183,5 +183,13 @@ RSpec.describe NodeattrUtils::NodeParser do
 
       include_examples 'expands the nodes'
     end
+
+    context 'with a suffix and a discrete range' do
+      let(:indices) { ['0', '00', '1', '02', '3', '4', '6', '007'] }
+      let(:nodes) { indices.map { |i| "node#{i}edon" } }
+      let(:nodes_string) { "node[#{indices.join(',')}]edon" }
+
+      include_examples 'expands the nodes'
+    end
   end
 end
