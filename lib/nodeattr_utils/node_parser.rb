@@ -31,10 +31,11 @@ module NodeattrUtils
     EXTERNAL_COMMA = /,(?![^\[]*\])/
     CHAR = /[^\s\=\,\[]/
     NAME = /#{CHAR}+/
+    SUFFIX = /#{CHAR}*/
     RANGE = /\[(\d+([,-]\d+)*)\]/ # Exclude invalid: [] [,] [1-] etc...
-    SECTION = /#{NAME}(#{RANGE})?/
+    SECTION = /#{NAME}(#{RANGE}#{SUFFIX})?/
     GENERAL_REGEX = /\A#{SECTION}(,#{SECTION})*\Z/
-    RANGE_REGEX = /\A(#{NAME})#{RANGE}\Z/
+    RANGE_REGEX = /\A(#{NAME})#{RANGE}(#{SUFFIX})\Z/
 
     def self.expand(nodes_string)
       return [] if nodes_string.nil? || nodes_string.empty?
@@ -42,9 +43,10 @@ module NodeattrUtils
       nodes_string.split(EXTERNAL_COMMA)
                   .each_with_object([]) do |section, nodes|
         if match = section.match(RANGE_REGEX)
-          prefix, ranges = match[1,2]
+          # match 3 is the 2nd num of the range, used later
+          prefix, ranges, _, suffix = match[1,4]
           ranges.split(',').each do |range|
-            nodes.push(*expand_range(prefix, range))
+            nodes.push(*expand_range(prefix, range, suffix))
           end
         else
           nodes.push(section)
@@ -61,15 +63,15 @@ module NodeattrUtils
       ERROR
     end
 
-    def self.expand_range(prefix, range)
-      return ["#{prefix}#{range}"] unless range.include?('-')
+    def self.expand_range(prefix, range, suffix)
+      return ["#{prefix}#{range}#{suffix}"] unless range.include?('-')
       min_str, _ = indices = range.split('-')
       min, max = indices.map(&:to_i)
       raise NodeSyntaxError, <<~ERROR if min > max
         '#{range}' the minimum index can not be greater than the maximum
       ERROR
       (min .. max).map do |num|
-        sprintf("#{prefix}%0#{min_str.length}d", num)
+        sprintf("#{prefix}%0#{min_str.length}d#{suffix}", num)
       end
     end
   end
