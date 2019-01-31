@@ -41,9 +41,11 @@ RSpec.describe NodeattrUtils::NodeParser do
     end
 
     context 'with a invalid node input' do
+      # NB: according to genders' specification '=' is invalid in node names
       [
         '%%%', 'n[1-9', 'n4]', 'n[c]', 'n[1,c,2]', 'n[2-1]', 'n[-2]', 'n[]',
-        'n[1,,2]', 'n[1,-2]', 'n[,]', 'n[-]'
+        'n[1,,2]', 'n[1,-2]', 'n[,]', 'n[-]', 'no=de[1-10]', 'no[de[1-10]',
+        'node[1-10]node[1-10]'
       ].each do |node|
         it "#{node.inspect} raises NodeSyntaxError" do
           expect do
@@ -68,7 +70,7 @@ RSpec.describe NodeattrUtils::NodeParser do
     end
 
     context 'with a single node input' do
-      ['node', 'node1', 'node01'].each do |node|
+      ['node', 'node1', 'node01', 'node*1', 'node1edon'].each do |node|
         it "returns: [#{node}]" do
           expect_expand(node).to contain_exactly(node)
         end
@@ -152,6 +154,30 @@ RSpec.describe NodeattrUtils::NodeParser do
     context 'with multiple single nodes' do
       let(:nodes) { ['node', 'slave', 'login'] }
       let(:nodes_string) { nodes.join(',') }
+
+      include_examples 'expands the nodes'
+    end
+
+    context 'with non-standard prefixes' do
+      let(:indices) { [0, 20] }
+      let(:nodes) { index_range(indices).map { |i| "no*de#{i}" } }
+      let(:nodes_string) { "no*de[#{indices.first}-#{indices.last}]" }
+
+      include_examples 'expands the nodes'
+    end
+
+    context 'with suffixes' do
+      let(:indices) { [0, 20] }
+      let(:nodes) { index_range(indices).map { |i| "node#{i}edon" } }
+      let(:nodes_string) { "node[#{indices.first}-#{indices.last}]edon" }
+
+      include_examples 'expands the nodes'
+    end
+
+    context 'with non-standard suffixes' do
+      let(:indices) { [0, 20] }
+      let(:nodes) { index_range(indices).map { |i| "node#{i}edon*" } }
+      let(:nodes_string) { "node[#{indices.first}-#{indices.last}]edon*" }
 
       include_examples 'expands the nodes'
     end
