@@ -43,7 +43,7 @@ RSpec.describe NodeattrUtils::NodeParser do
     context 'with a invalid node input' do
       # NB: according to genders' specification '=' is invalid in node names
       [
-        '%%%', 'n[1-9', 'n4]', 'n[c]', 'n[1,c,2]', 'n[2-1]', 'n[-2]', 'n[]',
+        'n[1-9', 'n[c]', 'n[1,c,2]', 'n[2-1]', 'n[-2]', 'n[]',
         'n[1,,2]', 'n[1,-2]', 'n[,]', 'n[-]', 'no=de[1-10]', 'no[de[1-10]',
         'node[1-10]node[1-10]'
       ].each do |node|
@@ -70,7 +70,9 @@ RSpec.describe NodeattrUtils::NodeParser do
     end
 
     context 'with a single node input' do
-      ['node', 'node1', 'node01', 'node*1', 'node1edon'].each do |node|
+      [
+       'node', 'node1', 'node01', 'node*1', 'node1edon', '***', 'n4]'
+      ].each do |node|
         it "returns: [#{node}]" do
           expect_expand(node).to contain_exactly(node)
         end
