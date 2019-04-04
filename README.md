@@ -1,39 +1,50 @@
-# NodeattrUtils
+# NodeattrUtils Library
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/nodeattr_utils`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A Ruby library for handling nodeattr-style host specifications.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-```ruby
+```
 gem 'nodeattr_utils'
 ```
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install nodeattr_utils
+```
+$ gem install nodeattr_utils
+```
 
-## Usage
+# Contributing
 
-TODO: Write usage instructions here
+Fork the project. Make your feature addition or bug fix. Send a pull
+request. Bonus points for topic branches.
 
-## Development
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+# Copyright and License
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Eclipse Public License 2.0, see [LICENSE.txt](LICENSE.txt) for details.
 
-## Contributing
+Copyright (C) 2019-present Alces Flight Ltd.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/nodeattr_utils. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+This program and the accompanying materials are made available under
+the terms of the Eclipse Public License 2.0 which is available at
+[https://www.eclipse.org/legal/epl-2.0](https://www.eclipse.org/legal/epl-2.0),
+or alternative license terms made available by Alces Flight Ltd -
+please direct inquiries about licensing to
+[licensing@alces-flight.com](mailto:licensing@alces-flight.com).
 
-## Code of Conduct
-
-Everyone interacting in the NodeattrUtils project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/nodeattr_utils/blob/master/CODE_OF_CONDUCT.md).
+NodeattrUtils is distributed in the hope that it will be
+useful, but WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER
+EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR
+CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR
+A PARTICULAR PURPOSE. See the [Eclipse Public License 2.0](https://opensource.org/licenses/EPL-2.0) for more
+details.
