@@ -25,6 +25,5 @@
 # https://github.com/openflighthpc/nodeattr_utils
 #==============================================================================m
 module NodeattrUtils
-  VERSION = "0.1.0"
+  VERSION = "1.0.0"
 end
-
