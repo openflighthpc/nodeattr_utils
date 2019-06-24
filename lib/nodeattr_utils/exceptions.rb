@@ -30,5 +30,7 @@ module NodeattrUtils
 
   class NodeSyntaxError < NodeattrUtilsError
   end
+
+  class RemovingOrphanGroupError < NodeattrUtilsError; end
 end
 
