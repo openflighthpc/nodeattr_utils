@@ -29,5 +29,16 @@ require 'nodeattr_utils/node_parser'
 require 'nodeattr_utils/exceptions'
 
 module NodeattrUtils
+  module Nodes
+    def self.expand(string)
+      NodeattrUtils::NodeParser.expand(string)
+    end
+
+    # TODO: Actually collapse the nodes array instead of joining them as a single
+    # string
+    def self.collapse(*nodes)
+      nodes.flatten.join(',')
+    end
+  end
 end
 
